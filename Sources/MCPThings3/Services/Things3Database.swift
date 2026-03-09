@@ -221,6 +221,8 @@ final class Things3Database: Sendable {
         default: // "open"
             conditions.append("TASK.status = 0")
             conditions.append("TASK.trashed = 0")
+            // Exclude todos whose parent project is completed, canceled, or trashed
+            conditions.append("(TASK.project IS NULL OR (PROJECT.status = 0 AND PROJECT.trashed = 0))")
         }
 
         let whereClause = conditions.joined(separator: " AND ")
@@ -305,6 +307,7 @@ final class Things3Database: Sendable {
         default:
             conditions.append("TASK.status = 0")
             conditions.append("TASK.trashed = 0")
+            conditions.append("(TASK.project IS NULL OR (PROJECT.status = 0 AND PROJECT.trashed = 0))")
         }
 
         let whereClause = conditions.joined(separator: " AND ")
